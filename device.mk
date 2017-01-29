@@ -103,8 +103,7 @@ PRODUCT_PACKAGES += \
 
 # Camera
 PRODUCT_PACKAGES += \
-    libshims_camera \
-    Camera2
+    Snap
 
 # Data
 PRODUCT_PACKAGES += \
