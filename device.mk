@@ -109,6 +109,10 @@ PRODUCT_PACKAGES += \
     libcamera_parameters_shim \
     Snap
 
+# Disable camera Treble path
+PRODUCT_PROPERTY_OVERRIDES += \
+    camera.disable_treble=true
+
 # Camera HIDL interfaces
 PRODUCT_PACKAGES += \
     android.hardware.camera.provider@2.4-impl \
