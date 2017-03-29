@@ -43,7 +43,7 @@ TARGET_CPU_VARIANT := krait
 
 # Kernel
 BOARD_KERNEL_BASE := 0x00000000
-BOARD_KERNEL_CMDLINE := androidboot.hardware=qcom user_debug=23 msm_rtb.filter=0x3b7 ehci-hcd.park=3 androidboot.bootdevice=msm_sdcc.1
+BOARD_KERNEL_CMDLINE := androidboot.hardware=qcom user_debug=23 msm_rtb.filter=0x3b7 ehci-hcd.park=3 androidboot.bootdevice=msm_sdcc.1 androidboot.selinux=permissive
 BOARD_KERNEL_PAGESIZE := 2048
 BOARD_MKBOOTIMG_ARGS := --ramdisk_offset 0x01000000 --tags_offset 0x00000100
 BOARD_KERNEL_IMAGE_NAME := zImage-dtb
@@ -56,7 +56,7 @@ TARGET_KERNEL_SOURCE := kernel/oneplus/onyx
 BOARD_ANT_WIRELESS_DEVICE := "vfs-prerelease"
 
 # Assert
-TARGET_OTA_ASSERT_DEVICE := onyx,OnePlus,E1003,ONE
+TARGET_OTA_ASSERT_DEVICE := onyx,OnePlus,E1003,ONE,oneplusx,opx
 
 # Audio
 AUDIO_FEATURE_ENABLED_HWDEP_CAL := true
@@ -84,11 +84,20 @@ TARGET_TAP_TO_WAKE_NODE := "/proc/touchpanel/double_tap_enable"
 
 # Enable dexpreopt to speed boot time
 ifeq ($(HOST_OS),linux)
-  ifeq ($(call match-word-in-list,$(TARGET_BUILD_VARIANT),user),true)
-    ifeq ($(WITH_DEXPREOPT_BOOT_IMG_ONLY),)
-      WITH_DEXPREOPT_BOOT_IMG_ONLY := true
+  # Only enable on user builds
+  # It's annoying to have to flash the whole rom to test things etc.
+  ifeq ($(TARGET_BUILD_VARIANT),user)
+    ifeq ($(WITH_DEXPREOPT),)
+      WITH_DEXPREOPT := true
     endif
-  endif
+  else
+    # Environment variable
+    ifeq ($(TARGET_FORCE_DEXPREOPT),true)
+      WITH_DEXPREOPT := true
+    else
+      WITH_DEXPREOPT := false
+    endif # TARGET_FORCE_DEXPREOPT = true
+  endif # TARGET_BUILD_VARIANT = user
 endif
 
 # Filesystem

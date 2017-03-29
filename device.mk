@@ -108,10 +108,6 @@ PRODUCT_PACKAGES += \
     librmnetctl \
     rmnetcli
 
-# Doze
-PRODUCT_PACKAGES += \
-    OneplusDoze
-
 # Graphics
 PRODUCT_PACKAGES += \
     copybit.msm8974 \
@@ -120,10 +116,6 @@ PRODUCT_PACKAGES += \
     memtrack.msm8974 \
     liboverlay \
     libtinyxml
-
-# Gello
-PRODUCT_PACKAGES += \
-    Gello
 
 # GPS
 PRODUCT_PACKAGES += \
