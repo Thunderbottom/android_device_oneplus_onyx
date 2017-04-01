@@ -15,11 +15,7 @@
  */
 
 #define CAMERA_PARAMETERS_EXTRA_C \
-    const char CameraParameters::FOCUS_MODE_MANUAL_POSITION[] = "manual"; \
-    const char CameraParameters::KEY_APP_MASK[] = "app-mask"; \
-    const char CameraParameters::WHITE_BALANCE_MANUAL_CCT[] = "manual-cct";
+    const char CameraParameters::KEY_APP_MASK[] = "app-mask";
 
 #define CAMERA_PARAMETERS_EXTRA_H \
-    static const char FOCUS_MODE_MANUAL_POSITION[]; \
-    static const char KEY_APP_MASK[]; \
-    static const char WHITE_BALANCE_MANUAL_CCT[];
+    static const char KEY_APP_MASK[];
