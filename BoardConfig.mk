@@ -53,6 +53,8 @@ TARGET_KERNEL_CONFIG := onyx_defconfig
 TARGET_KERNEL_SOURCE := kernel/oneplus/onyx
 TARGET_KERNEL_CROSS_COMPILE_PREFIX := arm-linux-androideabi-
 TARGET_CUSTOM_DTBTOOL := dtbtool_onyx
+TARGET_FORCE_STOCK_DTB_SEARCH := true
+TARGET_WANTS_DTIMAGE_BUILT := true
 
 # Krait Optimizations
 TARGET_USE_KRAIT_PLD_SET := true
@@ -190,5 +192,9 @@ BOARD_USES_QCNE := true
 ifeq ($(BOARD_USES_QCNE),true)
 TARGET_LDPRELOAD := libNimsWrap.so
 endif
+
+# Only dexpreopt if TARGET_FORCE_DEXPREOPT or WITH_DEXPREOPT is true
+TARGET_FORCE_DEXPREOPT ?= false
+WITH_DEXPREOPT ?= $(TARGET_FORCE_DEXPREOPT)
 
 -include vendor/oneplus/onyx/BoardConfigVendor.mk
