@@ -49,6 +49,6 @@ public class VibratorHW {
     }
 
     public static boolean setIntensity(int intensity)  {
-        return FileUtils.writeLine(AMP_PATH, String.valueOf(intensity));
+        return FileUtils.writeString(AMP_PATH, String.valueOf(intensity));
     }
 }
