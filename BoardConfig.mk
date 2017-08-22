@@ -143,6 +143,9 @@ TARGET_RECOVERY_DEVICE_MODULES := libinit_onyx
 # Keymaster
 TARGET_KEYMASTER_WAIT_FOR_QSEE := true
 
+# Vendor Interface Manifest
+DEVICE_MANIFEST_FILE := $(PLATFORM_PATH)/manifest.xml
+
 # Lights
 TARGET_PROVIDES_LIBLIGHT := true
 
