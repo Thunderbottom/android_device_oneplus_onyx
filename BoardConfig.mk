@@ -164,9 +164,6 @@ BOARD_USES_QCOM_HARDWARE := true
 # Recovery
 TARGET_RECOVERY_FSTAB := $(PLATFORM_PATH)/rootdir/etc/fstab.qcom
 
-# RIL
-TARGET_RIL_VARIANT := caf
-
 # RPC
 TARGET_NO_RPC := true
 
