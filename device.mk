@@ -93,10 +93,20 @@ PRODUCT_PACKAGES += \
     libqcomvoiceprocessing \
     tinymix
 
+# Audio HIDL interfaces
+PRODUCT_PACKAGES += \
+    android.hardware.audio@2.0-impl \
+    android.hardware.audio.effect@2.0-impl \
+
 # Camera
 PRODUCT_PACKAGES += \
     camera.msm8974 \
     Snap
+
+# Camera HIDL interfaces
+PRODUCT_PACKAGES += \
+    android.hardware.camera.provider@2.4-impl \
+    camera.device@3.2-impl
 
 # Data
 PRODUCT_PACKAGES += \
@@ -107,10 +117,13 @@ PRODUCT_PACKAGES += \
 PRODUCT_PACKAGES += \
     OnyxDoze
 
-# Bluetooth HAL
+# Bluetooth
 PRODUCT_PACKAGES += \
-    android.hardware.bluetooth@1.0-impl \
     libbt-vendor
+
+# Bluetooth HIDL interfaces
+PRODUCT_PACKAGES += \
+    android.hardware.bluetooth@1.0-impl
 
 # Graphics
 PRODUCT_PACKAGES += \
@@ -120,6 +133,12 @@ PRODUCT_PACKAGES += \
     memtrack.msm8974 \
     liboverlay \
     libtinyxml
+
+# Display HIDL interfaces
+PRODUCT_PACKAGES += \
+    android.hardware.graphics.allocator@2.0-impl \
+    android.hardware.graphics.composer@2.1-impl \
+    android.hardware.graphics.mapper@2.0-impl
 
 # GPS
 PRODUCT_PACKAGES += \
@@ -132,6 +151,10 @@ PRODUCT_COPY_FILES += \
     $(LOCAL_PATH)/gps/quipc.conf:system/etc/quipc.conf \
     $(LOCAL_PATH)/gps/sap.conf:system/etc/sap.conf \
     $(LOCAL_PATH)/gps/xtwifi.conf:system/etc/xtwifi.conf
+
+# GPS HIDL interfaces
+PRODUCT_PACKAGES += \
+    android.hardware.gnss@1.0-impl
 
 # IPv6
 PRODUCT_PACKAGES += \
@@ -150,6 +173,10 @@ PRODUCT_COPY_FILES += \
 PRODUCT_PACKAGES += \
     keystore.msm8974
 
+# Keymaster HIDL interfaces
+PRODUCT_PACKAGES += \
+    android.hardware.keymaster@3.0-impl
+
 # FM
 PRODUCT_PACKAGES += \
     FMRadio \
@@ -158,6 +185,14 @@ PRODUCT_PACKAGES += \
 # Lights
 PRODUCT_PACKAGES += \
     lights.msm8974
+
+# Lights HIDL interfaces
+PRODUCT_PACKAGES += \
+    android.hardware.light@2.0-impl
+
+# Vibrator HIDL interfaces
+PRODUCT_PACKAGES += \
+    android.hardware.vibrator@1.0-impl
 
 # Media
 PRODUCT_COPY_FILES += \
@@ -199,6 +234,10 @@ PRODUCT_COPY_FILES += \
 PRODUCT_PACKAGES += \
     libshims_sensors
 
+# Sensors HIDL interfaces
+PRODUCT_PACKAGES += \
+    android.hardware.sensors@1.0-impl
+
 # Thermal config
 PRODUCT_COPY_FILES += \
     $(LOCAL_PATH)/configs/thermal-engine-8974.conf:system/etc/thermal-engine-8974.conf
@@ -206,6 +245,10 @@ PRODUCT_COPY_FILES += \
 # USB
 PRODUCT_PACKAGES += \
     com.android.future.usb.accessory
+
+# USB HIDL interfaces
+PRODUCT_PACKAGES += \
+    android.hardware.usb@1.0-service
 
 # WiFi
 PRODUCT_COPY_FILES += \
@@ -225,7 +268,7 @@ PRODUCT_PACKAGES += \
     hostapd.accept \
     hostapd.deny
 
-# WiFi HAL
+# WiFi HIDL interfaces
 PRODUCT_PACKAGES += \
     android.hardware.wifi@1.0-service
 
