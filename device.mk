@@ -106,6 +106,7 @@ PRODUCT_PACKAGES += \
 PRODUCT_PACKAGES += \
     libshims_atomic \
     libshims_camera \
+    libcamera_parameters_shim \
     Snap
 
 # Camera HIDL interfaces
