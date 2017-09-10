@@ -193,6 +193,9 @@ on post-fs
     # Reverse Keys
     write /proc/s1302/key_rep 1
 
+    # Double tap to wake
+    write /proc/touchpanel/double_tap_enable 1
+
     # Touchscreen
     chown system radio /proc/touchpanel/double_tap_enable
     chmod 0660 /proc/touchpanel/double_tap_enable
