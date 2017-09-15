@@ -104,9 +104,8 @@ PRODUCT_PACKAGES += \
 
 # Camera
 PRODUCT_PACKAGES += \
+    camera.msm8974 \
     libshims_atomic \
-    libshims_camera \
-    libcamera_parameters_shim \
     Snap
 
 # Disable camera Treble path
