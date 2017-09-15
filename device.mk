@@ -194,7 +194,13 @@ PRODUCT_PACKAGES += \
 # FM
 PRODUCT_PACKAGES += \
     FMRadio \
-    libfmjni
+    libqcomfm_jni \
+    qcom.fmradio \
+    qcom.fmradio.xml
+
+# FM HIDL interfaces
+PRODUCT_PACKAGES += \
+    android.hardware.broadcastradio@1.0-impl
 
 # Lights
 PRODUCT_PACKAGES += \
