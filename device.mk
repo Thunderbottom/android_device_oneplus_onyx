@@ -106,7 +106,8 @@ PRODUCT_PACKAGES += \
 PRODUCT_PACKAGES += \
     camera.msm8974 \
     libshims_atomic \
-    Snap
+    Snap \
+    Camera2
 
 # Disable camera Treble path
 PRODUCT_PROPERTY_OVERRIDES += \
