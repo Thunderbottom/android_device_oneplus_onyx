@@ -77,7 +77,9 @@
   *                    RIL_UNSOL_MODEM_RESTART,
   *                    RIL_REQUEST_SEND_DEVICE_STATE,
   *                    RIL_REQUEST_SET_UNSOLICITED_RESPONSE_FILTER,
-  *                    RIL_REQUEST_SET_SIM_CARD_POWER
+  *                    RIL_REQUEST_SET_SIM_CARD_POWER,
+  *                    RIL_REQUEST_SET_CARRIER_INFO_IMSI_ENCRYPTION,
+  *                    RIL_UNSOL_CARRIER_INFO_IMSI_ENCRYPTION
   *                    The new parameters for RIL_REQUEST_SETUP_DATA_CALL,
   *                    Updated data structures: RIL_DataProfileInfo_v15, RIL_InitialAttachApn_v15
   *                    New data structure RIL_DataRegistrationStateResponse,
@@ -749,6 +751,21 @@
                                           * all carriers with the same mcc/mnc are allowed.
                                           */
  } RIL_CarrierRestrictions;
+
+typedef struct {
+  char * mcc;                         /* MCC of the Carrier. */
+  char * mnc ;                        /* MNC of the Carrier. */
+  uint8_t * carrierKey;               /* Public Key from the Carrier used to encrypt the
+                                       * IMSI/IMPI.
+                                       */
+  char * keyIdentifier;               /* The keyIdentifier Attribute value pair that helps
+                                       * a server locate the private key to decrypt the
+                                       * permanent identity.
+                                       */
+  int64_t expirationTime;             /* Date-Time (in UTC) when the key will expire. */
+
+} RIL_CarrierInfoForImsiEncryption;
+
  
  /* See RIL_REQUEST_LAST_CALL_FAIL_CAUSE */
  typedef enum {
@@ -2390,7 +2407,7 @@ typedef struct {
   *  NO_NETWORK_FOUND
   *  INVALID_CALL_ID
   *  DEVICE_IN_USE
-  *  MODE_NOT_SUPPORTED
+  *  OPERATION_NOT_ALLOWED
   *  ABORTED
   */
  #define RIL_REQUEST_DIAL 10
@@ -2805,7 +2822,7 @@ typedef struct {
   *  INVALID_SMSC_ADDRESS
   *  MODEM_ERR
   *  NETWORK_ERR
-  *  MODE_NOT_SUPPORTED
+  *  OPERATION_NOT_ALLOWED
   *
   * FIXME how do we specify TP-Message-Reference if we need to resend?
   */
@@ -2847,7 +2864,7 @@ typedef struct {
   *  NETWORK_ERR
   *  ENCODING_ERR
   *  INVALID_SMSC_ADDRESS
-  *  MODE_NOT_SUPPORTED
+  *  OPERATION_NOT_ALLOWED
   *
   */
  #define RIL_REQUEST_SEND_SMS_EXPECT_MORE 26
@@ -3916,7 +3933,7 @@ typedef struct {
   *  NO_MEMORY
   *  NO_RESOURCES
   *  INVALID_MODEM_STATE
-  *  MODE_NOT_SUPPORTED
+  *  OPERATION_NOT_ALLOWED
   *  INVALID_SMSC_ADDRESS
   *
   */
@@ -4127,7 +4144,7 @@ typedef struct {
   *  SUCCESS
   *  RADIO_NOT_AVAILABLE (radio resetting)
   *  OPERATION_NOT_ALLOWED
-  *  MODE_NOT_SUPPORTED
+  *  OPERATION_NOT_ALLOWED
   *  NO_MEMORY
   *  INTERNAL_ERR
   *  SYSTEM_ERR
@@ -4493,7 +4510,7 @@ typedef struct {
   *  NETWORK_ERR
   *  ENCODING_ERR
   *  INVALID_SMSC_ADDRESS
-  *  MODE_NOT_SUPPORTED
+  *  OPERATION_NOT_ALLOWED
   *
   */
  #define RIL_REQUEST_CDMA_SEND_SMS 87
@@ -4519,7 +4536,7 @@ typedef struct {
   *  SYSTEM_ERR
   *  MODEM_ERR
   *  INVALID_STATE
-  *  MODE_NOT_SUPPORTED
+  *  OPERATION_NOT_ALLOWED
   *  NETWORK_NOT_READY
   *  INVALID_MODEM_STATE
   *
@@ -4730,7 +4747,7 @@ typedef struct {
   *  NO_MEMORY
   *  NO_RESOURCES
   *  INVALID_MODEM_STATE
-  *  MODE_NOT_SUPPORTED
+  *  OPERATION_NOT_ALLOWED
   *  INVALID_SMSC_ADDRESS
   *
   */
@@ -5143,7 +5160,7 @@ typedef struct {
   *  NETWORK_ERR
   *  ENCODING_ERR
   *  INVALID_SMSC_ADDRESS
-  *  MODE_NOT_SUPPORTED
+  *  OPERATION_NOT_ALLOWED
   *
   */
  #define RIL_REQUEST_IMS_SEND_SMS 113
@@ -5736,6 +5753,44 @@ typedef struct {
  *
  */
 #define RIL_REQUEST_STOP_NETWORK_SCAN 143
+
+/**
+ * RIL_REQUEST_START_KEEPALIVE
+ *
+ * Start a keepalive session
+ *
+ * Request that the modem begin sending keepalive packets on a particular
+ * data call, with a specified source, destination, and format.
+ *
+ * "data" is a const RIL_RequestKeepalive
+ * "response" is RIL_KeepaliveStatus with a valid "handle"
+ *
+ * Valid errors:
+ *  SUCCESS
+ *  NO_RESOURCES
+ *  INVALID_ARGUMENTS
+ *
+ */
+#define RIL_REQUEST_START_KEEPALIVE 144
+
+/**
+ * RIL_REQUEST_STOP_KEEPALIVE
+ *
+ * Stops an ongoing keepalive session
+ *
+ * Requests that a keepalive session with the given handle be stopped.
+ * there is no parameter for this request.
+ *
+ * "data" is an integer handle
+ * "response" is NULL
+ *
+ * Valid errors:
+ *  SUCCESS
+ *  INVALID_ARGUMENTS
+ *
+ */
+#define RIL_REQUEST_STOP_KEEPALIVE 145
+
 
  /***********************************************************************/
  
@@ -6401,6 +6456,26 @@ typedef struct {
  * "response" is a const RIL_NetworkScanResult *
  */
 #define RIL_UNSOL_NETWORK_SCAN_RESULT 1049
+
+/**
+ * RIL_UNSOL_KEEPALIVE_STATUS
+ *
+ * "data" is NULL
+ * "response" is a const RIL_KeepaliveStatus *
+ */
+#define RIL_UNSOL_KEEPALIVE_STATUS 1050
+
+/*
+ * RIL_UNSOL_CARRIER_INFO_IMSI_ENCRYPTION
+ *
+ * Called when the modem needs Carrier specific information that will
+ * be used to encrypt IMSI and IMPI.
+ *
+ * "data" is NULL
+ *
+ */
+#define RIL_UNSOL_CARRIER_INFO_IMSI_ENCRYPTION 1048
+
  
  /***********************************************************************/
  
@@ -6561,6 +6636,36 @@ typedef struct {
      char *contents;             /* Carrier-defined content.  It is binary, opaque and
                                     loosely defined in LTE Layer 3 spec 24.008 */
  } RIL_PCO_Data;
+
+typedef enum {
+    NATT_IPV4 = 0,              /* Keepalive specified by RFC 3948 Sec. 2.3 using IPv4 */
+    NATT_IPV6 = 1               /* Keepalive specified by RFC 3948 Sec. 2.3 using IPv6 */
+} RIL_KeepaliveType;
+
+#define MAX_INADDR_LEN 16
+typedef struct {
+    RIL_KeepaliveType type;                  /* Type of keepalive packet */
+    char sourceAddress[MAX_INADDR_LEN];      /* Source address in network-byte order */
+    int sourcePort;                          /* Source port if applicable, or 0x7FFFFFFF;
+                                                the maximum value is 65535 */
+    char destinationAddress[MAX_INADDR_LEN]; /* Destination address in network-byte order */
+    int destinationPort;                     /* Destination port if applicable or 0x7FFFFFFF;
+                                                the maximum value is 65535 */
+    int maxKeepaliveIntervalMillis;          /* Maximum milliseconds between two packets */
+    int cid;                                 /* Context ID, uniquely identifies this call */
+} RIL_KeepaliveRequest;
+
+typedef enum {
+    KEEPALIVE_ACTIVE,                       /* Keepalive session is active */
+    KEEPALIVE_INACTIVE,                     /* Keepalive session is inactive */
+    KEEPALIVE_PENDING                       /* Keepalive session status not available */
+} RIL_KeepaliveStatusCode;
+
+typedef struct {
+    uint32_t sessionHandle;
+    RIL_KeepaliveStatusCode code;
+} RIL_KeepaliveStatus;
+
  
  #ifdef RIL_SHLIB
  struct RIL_Env {
